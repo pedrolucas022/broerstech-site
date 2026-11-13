@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BroersTech | Engenharia Digital de Alto Nível</title>
+<meta name="description" content="BroersTech — Tecnologia que conecta, soluções que transformam.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Manrope:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --black: #050505;
+    --black-2: #0a0a0a;
+    --black-3: #111111;
+    --black-4: #1a1a1a;
+    
+    --silver-1: #f5f5f7;
+    --silver-2: #e0e0e3;
+    --silver-3: #c8c8cc;
+    --silver-4: #a8a8ac;
+    --silver-5: #8a8a8e;
+    --silver-6: #6a6a6e;
+    
+    --neon-blue: #007bff;
+    --neon-blue-glow: rgba(0, 123, 255, 0.4);
+    
+    --platinum: linear-gradient(135deg, #f5f5f7 0%, #c8c8cc 35%, #8a8a8e 65%, #e0e0e3 100%);
+    --platinum-shine: linear-gradient(120deg, #8a8a8e 0%, #f5f5f7 25%, #e0e0e3 50%, #a8a8ac 75%, #f5f5f7 100%);
+    
+    --border-dark: rgba(200,200,204,0.12);
+    
+    --sidebar-w: 260px;
+    --sidebar-right-w: 52px;
+    --ticker-h: 44px;
+  }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    color: var(--silver-1);
+    background: var(--black);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* ============ LOGO (IMAGEM REAL) ============ */
+  .brand-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 100%;
+    transition: transform 0.3s ease;
+  }
+  
+  .brand-logo:hover {
+    transform: scale(1.03);
+  }
+
+  .logo-img {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    display: block;
+    /* A MÁGICA: Remove o fundo preto da imagem real */
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 10px rgba(0, 123, 255, 0.25));
+    transition: filter 0.3s ease;
+  }
+  
+  .brand-logo:hover .logo-img {
+    filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.7)) brightness(1.1);
+  }
+
+  /* ============ TOP TICKER ============ */
+  .top-ticker {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-w);
+    right: var(--sidebar-right-w);
+    height: var(--ticker-h);
+    background: var(--black-2);
+    border-bottom: 1px solid var(--border-dark);
+    overflow: hidden;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+  }
+  
+  .top-ticker::before,
+  .top-ticker::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .top-ticker::before { left: 0; background: linear-gradient(90deg, var(--black-2), transparent); }
+  .top-ticker::after  { right: 0; background: linear-gradient(-90deg, var(--black-2), transparent); }
+  
+  .ticker-track {
+    display: flex;
+    white-space: nowrap;
+    animation: tickerScroll 60s linear infinite;
+  }
+  .top-ticker:hover .ticker-track { animation-play-state: paused; }
+  
+  @keyframes tickerScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 2.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--silver-5);
+    white-space: nowrap;
+  }
+  .ticker-item .dot {
+    width: 5px; height: 5px;
+    background: var(--neon-blue);
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--neon-blue);
+  }
+  .ticker-item strong { color: var(--silver-1); font-weight: 500; }
+  
+  /* ============ SIDEBAR LEFT ============ */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--black-2);
+    border-right: 1px solid var(--border-dark);
+    z-index: 101;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .brand-wrap {
+    padding: 0 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-dark);
+    margin-bottom: 2rem;
+  }
+  
+  .nav-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-6);
+    padding: 0 1.75rem;
+    margin-bottom: 0.85rem;
+  }
+  
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0 0.85rem;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 0.9rem;
+    text-decoration: none;
+    color: var(--silver-4);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.25s;
+    position: relative;
+  }
+  .nav-link .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--silver-6);
+    width: 22px;
+    transition: color 0.25s;
+  }
+  .nav-link:hover { color: var(--silver-1); background: var(--black-3); }
+  .nav-link.active {
+    color: var(--silver-1);
+    background: linear-gradient(90deg, rgba(0, 123, 255, 0.15) 0%, transparent 100%);
+    border-left: 2px solid var(--neon-blue);
+    font-weight: 600;
+  }
+  .nav-link.active .num { color: var(--neon-blue); }
+  
+  .sidebar-foot {
+    margin-top: auto;
+    padding: 1.5rem 1.75rem;
+    border-top: 1px solid var(--border-dark);
+  }
+  .sidebar-foot .quote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--silver-3);
+    line-height: 1.5;
+    margin-bottom: 0.9rem;
+  }
+  .sidebar-foot .quote::before { content: '"'; }
+  .sidebar-foot .quote::after { content: '"'; }
+  .sidebar-foot .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--silver-6);
+    text-transform: uppercase;
+  }
+  
+  /* ============ SIDEBAR RIGHT ============ */
+  .sidebar-right {
+    position: fixed;
+    top: var(--ticker-h);
+    right: 0;
+    width: var(--sidebar-right-w);
+    height: calc(100vh - var(--ticker-h));
+    background: var(--black-2);
+    border-left: 1px solid var(--border-dark);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 0;
+    overflow: hidden;
+  }
+  
+  .sidebar-right .vertical-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-6);
+    writing-mode: vertical-rl;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-dark);
+    margin-bottom: 1.25rem;
+  }
+  
+  .vt-wrap { flex: 1; overflow: hidden; width: 100%; position: relative; }
+  .vt-track {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    animation: vscroll 40s linear infinite;
+    align-items: center;
+    padding: 1rem 0;
+  }
+  .sidebar-right:hover .vt-track { animation-play-state: paused; }
+  
+  @keyframes vscroll {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+  
+  .vt-item {
+    writing-mode: vertical-rl;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--silver-5);
+    white-space: nowrap;
+  }
+  .vt-item.hl { color: var(--silver-2); }
+  
+  .sidebar-right .bottom-mark {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--neon-blue);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-dark);
+    margin-top: 1.25rem;
+  }
+  
+  /* ============ MAIN ============ */
+  .main {
+    margin-left: var(--sidebar-w);
+    margin-right: var(--sidebar-right-w);
+    padding-top: var(--ticker-h);
+    min-height: 100vh;
+  }
+  
+  /* ============ HERO ============ */
+  .hero {
+    min-height: calc(100vh - var(--ticker-h));
+    padding: 5rem 4rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-dark);
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(0,123,255,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(200,200,204,0.03) 0%, transparent 50%);
+  }
+  
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,200,204,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,200,204,0.06) 1px, transparent 1px);
+    background-size: 90px 90px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+    pointer-events: none;
+  }
+  
+  .hero-content { position: relative; z-index: 2; max-width: 1000px; }
+  
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1.15rem;
+    border: 1px solid var(--border-dark);
+    border-radius: 100px;
+    background: rgba(200,200,204,0.03);
+    margin-bottom: 2.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--silver-4);
+  }
+  .hero-eyebrow .pulse {
+    width: 6px; height: 6px;
+    background: var(--neon-blue);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-blue);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px var(--neon-blue); }
+    50% { opacity: 0.5; transform: scale(0.8); box-shadow: 0 0 2px var(--neon-blue); }
+  }
+  
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.8rem, 6vw, 5.8rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--silver-1);
+    margin-bottom: 2rem;
+  }
+  .hero h1 .shine {
+    background: var(--platinum-shine);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+    animation: shine 6s linear infinite;
+    display: inline-block;
+  }
+  @keyframes shine { to { background-position: 200% center; } }
+  
+  .hero .lede {
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    color: var(--silver-4);
+    max-width: 620px;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+  .hero .lede strong { color: var(--silver-1); font-weight: 600; }
+  
+  .hero-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.95rem 1.85rem;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+    letter-spacing: -0.005em;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-platinum {
+    background: var(--platinum);
+    color: var(--black);
+    border-color: transparent;
+    box-shadow: 0 4px 24px rgba(200,200,204,0.15);
+  }
+  .btn-platinum::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+  }
+  .btn-platinum:hover::before { transform: translateX(100%); }
+  .btn-platinum:hover {
+    box-shadow: 0 8px 40px var(--neon-blue-glow);
+    transform: translateY(-2px);
+  }
+  
+  .btn-outline {
+    background: transparent;
+    color: var(--silver-1);
+    border-color: var(--border-dark);
+  }
+  .btn-outline:hover {
+    background: var(--silver-1);
+    color: var(--black);
+    border-color: var(--silver-1);
+  }
+  
+  .btn .arrow { transition: transform 0.3s; }
+  .btn:hover .arrow { transform: translateX(4px); }
+  
+  .hero-meta {
+    position: absolute;
+    bottom: 2rem;
+    left: 4rem;
+    right: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-dark);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--silver-6);
+    z-index: 2;
+  }
+  .hero-meta .scroll-ind {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--silver-4);
+  }
+  .hero-meta .scroll-ind .bar {
+    width: 40px; height: 1px;
+    background: var(--silver-3);
+    animation: slidebar 2s ease-in-out infinite;
+  }
+  @keyframes slidebar {
+    0%, 100% { transform: translateX(0); opacity: 1; }
+    50% { transform: translateX(12px); opacity: 0.4; }
+  }
+  
+  /* ============ PILARES (SUBSTITUIU A TRUST BAR) ============ */
+  .pillars-bar {
+    padding: 2.5rem 4rem;
+    border-bottom: 1px solid var(--border-dark);
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    background: var(--black-2);
+  }
+  .pillars-bar .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-6);
+    white-space: nowrap;
+  }
+  .pillars-bar .items {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .pillars-bar .pillar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    color: var(--silver-4);
+    font-style: italic;
+    white-space: nowrap;
+  }
+  .pillars-bar .pillar-item::before {
+    content: '◆';
+    color: var(--neon-blue);
+    font-size: 0.7rem;
+    font-style: normal;
+  }
+  
+  /* ============ SECTION BASE ============ */
+  section.block {
+    padding: 7rem 4rem;
+    border-bottom: 1px solid var(--border-dark);
+    position: relative;
+  }
+  
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-dark);
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .section-head .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-5);
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+  .section-head .kicker::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--neon-blue);
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--silver-1);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    background: var(--platinum);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-head .section-desc {
+    max-width: 400px;
+    color: var(--silver-5);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  /* ============ SERVICES ============ */
+  .services { background: var(--black-2); }
+  
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-dark);
+    border: 1px solid var(--border-dark);
+  }
+  
+  .service {
+    background: var(--black-2);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: all 0.4s;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .service::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,123,255,0.06) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service:hover::before { opacity: 1; }
+  
+  .service .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--silver-6);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .service .num::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-dark);
+  }
+  
+  .service h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.55rem;
+    font-weight: 400;
+    color: var(--silver-1);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .service p {
+    color: var(--silver-5);
+    font-size: 0.92rem;
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+  }
+  
+  .service .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--silver-4);
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--border-dark);
+    border-radius: 100px;
+    transition: all 0.3s;
+  }
+  .service:hover .tag {
+    background: var(--neon-blue);
+    color: var(--silver-1);
+    border-color: transparent;
+    box-shadow: 0 0 15px var(--neon-blue-glow);
+  }
+  
+  /* ============ ABOUT ============ */
+  .about { background: var(--black); }
+  
+  .about-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  
+  .about-text h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 2rem;
+    color: var(--silver-1);
+  }
+  .about-text h2 em {
+    font-style: italic;
+    background: var(--platinum);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .about-text p {
+    color: var(--silver-4);
+    font-size: 1.02rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-features {
+    list-style: none;
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+  .about-features li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-dark);
+    font-size: 0.95rem;
+    color: var(--silver-2);
+    font-weight: 500;
+  }
+  .about-features li:last-child { border-bottom: none; }
+  .about-features li::before {
+    content: '→';
+    color: var(--neon-blue);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+  
+  /* ============ METODOLOGIA (SUBSTITUIU OS NÚMEROS) ============ */
+  .method-card {
+    background: var(--black-2);
+    border: 1px solid var(--border-dark);
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .method-card::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border: 1px solid rgba(0,123,255,0.1);
+    border-radius: 50%;
+    top: -200px; right: -150px;
+  }
+  .method-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-5);
+    margin-bottom: 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .method-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .method-step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .method-step .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--neon-blue);
+    background: rgba(0,123,255,0.1);
+    border: 1px solid rgba(0,123,255,0.3);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  .method-step .step-info h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--silver-1);
+    margin-bottom: 0.35rem;
+  }
+  .method-step .step-info p {
+    color: var(--silver-5);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  
+  /* ============ FOUNDERS ============ */
+  .founders-head { text-align: center; margin-bottom: 4rem; }
+  .founders-head .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-5);
+    margin-bottom: 1.25rem;
+  }
+  .founders-head h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--silver-1);
+    line-height: 1.1;
+  }
+  .founders-head h2 em {
+    font-style: italic;
+    background: var(--platinum);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .founders-head p {
+    color: var(--silver-5);
+    max-width: 600px;
+    margin: 1.25rem auto 0;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+  
+  .founders-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-dark);
+    border: 1px solid var(--border-dark);
+  }
+  
+  .founder {
+    background: var(--black-2);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: all 0.4s;
+    overflow: hidden;
+  }
+  .founder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0,123,255,0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .founder:hover::before { opacity: 1; }
+  
+  .founder-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid var(--silver-4);
+    padding: 4px;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    transition: border-color 0.3s;
+  }
+  .founder:hover .founder-avatar { border-color: var(--neon-blue); }
+  
+  .founder-avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--black-4) 0%, var(--black-2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+  }
+  .founder-avatar-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--platinum);
+    -webkit-mask: radial-gradient(circle, black, transparent 70%);
+    mask: radial-gradient(circle, black, transparent 70%);
+    opacity: 0.5;
+  }
+  .founder-avatar-inner span {
+    position: relative;
+    z-index: 1;
+    background: var(--platinum);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+  }
+  
+  .founder .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--neon-blue);
+    margin-bottom: 0.75rem;
+  }
+  .founder h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--silver-1);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .founder p {
+    color: var(--silver-5);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+  }
+  .founder .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--silver-3);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-dark);
+    padding-bottom: 0.3rem;
+    transition: all 0.3s;
+  }
+  .founder .link:hover {
+    color: var(--neon-blue);
+    border-bottom-color: var(--neon-blue);
+  }
+  .founder .link::after { content: '↗'; font-family: 'Manrope', sans-serif; }
+  
+  /* ============ CTA ============ */
+  .cta {
+    background: var(--black);
+    padding: 8rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(0,123,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(200,200,204,0.04) 0%, transparent 50%);
+  }
+  .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,200,204,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,200,204,0.05) 1px, transparent 1px);
+    background-size: 70px 70px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  }
+  
+  .cta-inner { position: relative; z-index: 2; max-width: 850px; margin: 0 auto; }
+  
+  .cta .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-5);
+    margin-bottom: 1.75rem;
+  }
+  .cta h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 1.75rem;
+    color: var(--silver-1);
+  }
+  .cta h2 em {
+    font-style: italic;
+    background: var(--platinum-shine);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shine 6s linear infinite;
+  }
+  .cta p {
+    color: var(--silver-4);
+    font-size: 1rem;
+    margin-bottom: 3rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+  
+  /* ============ CONTACT ============ */
+  .contact { background: var(--black-2); }
+  
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+  }
+  
+  .contact-info h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    color: var(--silver-1);
+    line-height: 1.1;
+  }
+  .contact-info h2 em {
+    font-style: italic;
+    background: var(--platinum);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .contact-info > p {
+    color: var(--silver-5);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+  
+  .contact-item {
+    display: flex;
+    gap: 1.15rem;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--border-dark);
+    align-items: flex-start;
+  }
+  .contact-item:last-child { border-bottom: none; }
+  
+  .contact-item .ico {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border-dark);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--black-3);
+    font-size: 1rem;
+    color: var(--neon-blue);
+  }
+  
+  .contact-item .meta strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--silver-6);
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+  }
+  .contact-item .meta span {
+    color: var(--silver-1);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .contact-item .meta a {
+    color: var(--silver-1);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s;
+  }
+  .contact-item .meta a:hover { border-bottom-color: var(--neon-blue); }
+  
+  .contact-form {
+    background: var(--black-3);
+    border: 1px solid var(--border-dark);
+    padding: 2.5rem;
+    position: relative;
+  }
+  .contact-form::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    opacity: 0.8;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .form-group { margin-bottom: 1.35rem; }
+  .form-group label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--silver-5);
+    margin-bottom: 0.65rem;
+    font-weight: 500;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border-dark);
+    border-radius: 3px;
+    background: var(--black-2);
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.95rem;
+    color: var(--silver-1);
+    transition: all 0.3s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--neon-blue);
+    background: var(--black-4);
+    box-shadow: 0 0 0 3px var(--neon-blue-glow);
+  }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  
+  .contact-form .btn { width: 100%; justify-content: center; margin-top: 0.5rem; }
+  
+  /* ============ FOOTER ============ */
+  footer {
+    background: var(--black);
+    padding: 5rem 4rem 2.5rem;
+    border-top: 1px solid var(--border-dark);
+  }
+  
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    padding-bottom: 3.5rem;
+    border-bottom: 1px solid var(--border-dark);
+  }
+  
+  .footer-brand .brand-logo { justify-content: flex-start; margin-bottom: 1.5rem; max-width: 140px; }
+  
+  .footer-brand p {
+    color: var(--silver-5);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    max-width: 320px;
+  }
+  
+  .footer-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver-2);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  .footer-col ul { list-style: none; display: grid; gap: 0.85rem; }
+  .footer-col a {
+    color: var(--silver-5);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.25s;
+  }
+  .footer-col a:hover { color: var(--neon-blue); }
+  .footer-col li { color: var(--silver-5); font-size: 0.9rem; }
+  
+  .footer-bottom {
+    padding-top: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--silver-6);
+    text-transform: uppercase;
+  }
+  .footer-bottom .made { display: flex; align-items: center; gap: 0.5rem; }
+  
+  /* ============ MOBILE ============ */
+  .mobile-bar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: var(--black-2);
+    border-bottom: 1px solid var(--border-dark);
+    z-index: 200;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+  }
+  .mobile-bar .brand-logo { max-width: 100px; }
+  
+  .menu-btn {
+    background: var(--platinum);
+    color: var(--black);
+    border: none;
+    width: 42px; height: 42px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+  }
+  
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 150;
+    backdrop-filter: blur(3px);
+  }
+  .overlay.active { display: block; }
+  
+  @media (max-width: 1200px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .founders-grid { grid-template-columns: 1fr; }
+    .about-intro { grid-template-columns: 1fr; gap: 3rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  }
+  
+  @media (max-width: 1100px) {
+    .sidebar-right { display: none; }
+    .top-ticker { right: 0; }
+    .main { margin-right: 0; }
+  }
+  
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; --ticker-h: 0px; }
+    
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      width: 280px;
+      z-index: 160;
+    }
+    .sidebar.open { transform: translateX(0); }
+    
+    .mobile-bar { display: flex; }
+    .top-ticker { display: none; }
+    .main { padding-top: 60px; }
+    
+    section.block { padding: 4.5rem 1.5rem; }
+    .pillars-bar { padding: 2rem 1.5rem; }
+    
+    .hero { padding: 3rem 1.5rem; min-height: calc(100vh - 60px); }
+    .hero-meta {
+      position: static;
+      margin-top: 3rem;
+      padding: 0;
+      border: none;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    
+    .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .founders-grid { grid-template-columns: 1fr; }
+    
+    .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    footer { padding: 3rem 1.5rem 2rem; }
+    .cta { padding: 5rem 1.5rem; }
+    
+    .section-head { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .section-head .section-desc { max-width: 100%; }
+    
+    .form-row { grid-template-columns: 1fr; }
+    .about-intro { gap: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP TICKER -->
+<div class="top-ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="dot"></span> Engenharia de software de alto nível</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Cloud · DevOps · AI</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Arquitetura de sistemas críticos</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Segurança de nível corporativo</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Consultoria estratégica em tecnologia</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Do conceito ao deploy</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Automação inteligente de processos</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Dados que geram decisões</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Parceria de longo prazo com clientes</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Excelência técnica, sempre</strong></span>
+    <!-- dup -->
+    <span class="ticker-item"><span class="dot"></span> Engenharia de software de alto nível</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Cloud · DevOps · AI</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Arquitetura de sistemas críticos</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Segurança de nível corporativo</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Consultoria estratégica em tecnologia</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Do conceito ao deploy</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Automação inteligente de processos</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Dados que geram decisões</strong></span>
+    <span class="ticker-item"><span class="dot"></span> Parceria de longo prazo com clientes</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Excelência técnica, sempre</strong></span>
+  </div>
+</div>
+
+<!-- MOBILE BAR -->
+<div class="mobile-bar">
+  <a href="#home" class="brand-logo">
+    <!-- O SRC ABAIXO CHAMA A SUA IMAGEM -->
+    <img src="logo.png" alt="BroersTech Logo" class="logo-img">
+  </a>
+  <button class="menu-btn" id="menuToggle" aria-label="Abrir menu">☰</button>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+<!-- SIDEBAR LEFT -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand-wrap">
+    <a href="#home" class="brand-logo">
+      <!-- O SRC ABAIXO CHAMA A SUA IMAGEM -->
+      <img src="logo.png" alt="BroersTech Logo" class="logo-img">
+    </a>
+  </div>
+  
+  <div class="nav-label">Navegação</div>
+  <nav class="sidebar-nav">
+    <a href="#home" class="nav-link active"><span class="num">01</span> Início</a>
+    <a href="#services" class="nav-link"><span class="num">02</span> Serviços</a>
+    <a href="#about" class="nav-link"><span class="num">03</span> Sobre</a>
+    <a href="#founders" class="nav-link"><span class="num">04</span> Fundadores</a>
+    <a href="#contact" class="nav-link"><span class="num">05</span> Contato</a>
+  </nav>
+  
+  <div class="sidebar-foot">
+    <div class="quote">Tecnologia que conecta, soluções que transformam.</div>
+    <div class="meta">— BroersTech</div>
+  </div>
+</aside>
+
+<!-- SIDEBAR RIGHT -->
+<aside class="sidebar-right" aria-hidden="true">
+  <div class="vertical-label">Tech Notes</div>
+  <div class="vt-wrap">
+    <div class="vt-track">
+      <div class="vt-item">Inovação é a nossa assinatura</div>
+      <div class="vt-item hl">Código limpo, futuro sólido</div>
+      <div class="vt-item">Automação inteligente</div>
+      <div class="vt-item hl">Cloud &amp; Escalabilidade</div>
+      <div class="vt-item">Tecnologia que conecta</div>
+      <div class="vt-item hl">Segurança sem concessões</div>
+      <div class="vt-item">Do conceito ao deploy</div>
+      <div class="vt-item hl">Dados que geram decisões</div>
+      <div class="vt-item">Soluções sob medida</div>
+      <div class="vt-item hl">Excelência técnica</div>
+      <!-- loop -->
+      <div class="vt-item">Inovação é a nossa assinatura</div>
+      <div class="vt-item hl">Código limpo, futuro sólido</div>
+      <div class="vt-item">Automação inteligente</div>
+      <div class="vt-item hl">Cloud &amp; Escalabilidade</div>
+      <div class="vt-item">Tecnologia que conecta</div>
+      <div class="vt-item hl">Segurança sem concessões</div>
+      <div class="vt-item">Do conceito ao deploy</div>
+      <div class="vt-item hl">Dados que geram decisões</div>
+      <div class="vt-item">Soluções sob medida</div>
+      <div class="vt-item hl">Excelência técnica</div>
+    </div>
+  </div>
+  <div class="bottom-mark">◆</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <header class="hero" id="home">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="pulse"></span>
+        <span>Engenharia digital · Centro-Oeste, Brasil</span>
+      </div>
+      <h1>
+        Tecnologia que <span class="shine">conecta</span>,<br>
+        soluções que transformam.
+      </h1>
+      <p class="lede">
+        <strong>BroersTech</strong> — construímos infraestruturas digitais, produtos e sistemas sob medida para empresas que exigem excelência. Da estratégia ao deploy, com precisão técnica e padrão corporativo.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-platinum">Iniciar projeto <span class="arrow">→</span></a>
+        <a href="#services" class="btn btn-outline">Explorar serviços</a>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <span>Centro-Oeste · Brasil · Est. 2026</span>
+      <div class="scroll-ind">
+        <span>Scroll</span>
+        <span class="bar"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- PILARES (Substituiu a Trust Bar) -->
+  <div class="pillars-bar">
+    <div class="label">Nossos pilares</div>
+    <div class="items">
+      <span class="pillar-item">Excelência Técnica</span>
+      <span class="pillar-item">Inovação Contínua</span>
+      <span class="pillar-item">Compromisso com o Cliente</span>
+      <span class="pillar-item">Transparência Total</span>
+    </div>
+  </div>
+
+  <!-- SERVIÇOS -->
+  <section class="block services" id="services">
+    <div class="section-head">
+      <div>
+        <div class="kicker">O que fazemos</div>
+        <h2>Capacidades <em>técnicas</em></h2>
+      </div>
+      <p class="section-desc">Soluções completas em engenharia de software, infraestrutura e consultoria — desenhadas para escalar com o seu negócio.</p>
+    </div>
+    
+    <div class="services-grid">
+      <div class="service">
+        <div class="num">01</div>
+        <h3>Desenvolvimento de Software</h3>
+        <p>Produtos digitais sob medida — web, mobile e plataformas internas — com arquitetura escalável e padrão de engenharia sênior.</p>
+        <span class="tag">Produto · Engenharia</span>
+      </div>
+      <div class="service">
+        <div class="num">02</div>
+        <h3>Automação de Processos</h3>
+        <p>Automatize fluxos críticos e reduza custos operacionais com RPA, integrações e pipelines inteligentes.</p>
+        <span class="tag">RPA · Integrações</span>
+      </div>
+      <div class="service">
+        <div class="num">03</div>
+        <h3>Cloud &amp; DevOps</h3>
+        <p>Infraestrutura em nuvem, CI/CD, observabilidade e arquitetura resiliente — do zero à operação em produção.</p>
+        <span class="tag">AWS · GCP · Azure</span>
+      </div>
+      <div class="service">
+        <div class="num">04</div>
+        <h3>Consultoria em TI</h3>
+        <p>Auditoria técnica, modernização de legado e roadmap de tecnologia alinhado à estratégia de negócio.</p>
+        <span class="tag">Estratégia · Arquitetura</span>
+      </div>
+      <div class="service">
+        <div class="num">05</div>
+        <h3>Integração de Sistemas</h3>
+        <p>Conecte ERPs, CRMs e APIs corporativas com segurança, resiliência e governança de dados.</p>
+        <span class="tag">APIs · Middleware</span>
+      </div>
+      <div class="service">
+        <div class="num">06</div>
+        <h3>Segurança Digital</h3>
+        <p>Proteção de dados, hardening de sistemas e monitoramento contínuo com conformidade regulatória.</p>
+        <span class="tag">SOC · Compliance</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section class="block about" id="about">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Nossa história</div>
+        <h2>Sobre a <em>BroersTech</em></h2>
+      </div>
+      <p class="section-desc">Uma empresa movida pela convicção de que tecnologia de excelência é infraestrutura para o crescimento.</p>
+    </div>
+    
+    <div class="about-intro">
+      <div class="about-text">
+        <h2>Construindo o futuro, <em>byte a byte</em>.</h2>
+        <p>Fundada em 2026 no Centro-Oeste brasileiro, a BroersTech nasceu com o propósito de elevar o padrão da engenharia digital no Brasil — unindo rigor técnico, visão estratégica e sensibilidade de produto.</p>
+        <p>Cada projeto é tratado como uma peça de engenharia única. Nossa equipe atua do primeiro rascunho arquitetural ao deploy em produção, com um compromisso inegociável com qualidade.</p>
+        <ul class="about-features">
+          <li>Equipe especializada e certificada</li>
+          <li>Metodologias ágeis e engenharia de produto</li>
+          <li>Parceria de longo prazo com clientes</li>
+          <li>Suporte contínuo, observabilidade e escalabilidade</li>
+        </ul>
+      </div>
+      
+      <!-- METODOLOGIA (Substituiu o Stats Card) -->
+      <div class="method-card">
+        <div class="label">Como Trabalhamos</div>
+        <div class="method-list">
+          <div class="method-step">
+            <div class="step-num">01</div>
+            <div class="step-info">
+              <h4>Descoberta & Estratégia</h4>
+              <p>Entendemos o seu negócio, desafios e objetivos para alinhar a tecnologia à sua visão.</p>
+            </div>
+          </div>
+          <div class="method-step">
+            <div class="step-num">02</div>
+            <div class="step-info">
+              <h4>Arquitetura & Design</h4>
+              <p>Desenhamos a solução ideal, focando em escalabilidade, segurança e experiência do usuário.</p>
+            </div>
+          </div>
+          <div class="method-step">
+            <div class="step-num">03</div>
+            <div class="step-info">
+              <h4>Desenvolvimento Ágil</h4>
+              <p>Construímos o projeto em ciclos curtos, com entregas contínuas e transparência total.</p>
+            </div>
+          </div>
+          <div class="method-step">
+            <div class="step-num">04</div>
+            <div class="step-info">
+              <h4>Deploy & Evolução</h4>
+              <p>Colocamos no ar, monitoramos e evoluímos a solução para que ela cresça junto com a sua empresa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNDADORES -->
+  <section class="block" id="founders">
+    <div class="founders-head">
+      <div class="kicker">Liderança</div>
+      <h2>Os <em>fundadores</em></h2>
+      <p>Três sócios, uma visão em comum: elevar o padrão da engenharia digital no Brasil com rigor técnico e compromisso de longo prazo.</p>
+    </div>
+    
+    <div class="founders-grid">
+      <div class="founder">
+        <div class="founder-avatar">
+          <div class="founder-avatar-inner"><span>RS</span></div>
+        </div>
+        <div class="role">Co-fundador · Comercial</div>
+        <h3>Rafael Santana</h3>
+        <p>Responsável pela área comercial, prospecção e relacionamento com clientes. Conduz as negociações estratégicas e conecta as necessidades do mercado às soluções da BroersTech.</p>
+        <a href="#contact" class="link">Conectar</a>
+      </div>
+      <div class="founder">
+        <div class="founder-avatar">
+          <div class="founder-avatar-inner"><span>PS</span></div>
+        </div>
+        <div class="role">Co-fundador · Desenvolvedor</div>
+        <h3>Pedro Sales</h3>
+        <p>Responsável pelo desenvolvimento de software, arquitetura de sistemas e stack tecnológico. Referência em sistemas distribuídos, cloud e boas práticas de engenharia.</p>
+        <a href="#contact" class="link">Conectar</a>
+      </div>
+      <div class="founder">
+        <div class="founder-avatar">
+          <div class="founder-avatar-inner"><span>LS</span></div>
+        </div>
+        <div class="role">Co-fundador · Suporte</div>
+        <h3>Lucas Santana</h3>
+        <p>À frente do suporte técnico, atendimento ao cliente e manutenção de sistemas. Garante que cada projeto continue funcionando com estabilidade, agilidade e atenção personalizada.</p>
+        <a href="#contact" class="link">Conectar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="kicker">Vamos construir juntos</div>
+      <h2>Pronto para elevar o nível do seu <em>projeto</em>?</h2>
+      <p>Vamos desenhar a solução tecnológica que o seu negócio precisa — do primeiro rascunho arquitetural ao deploy em produção.</p>
+      <a href="#contact" class="btn btn-platinum">Solicitar proposta <span class="arrow">→</span></a>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section class="block contact" id="contact">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Entre em contato</div>
+        <h2>Vamos <em>conversar</em></h2>
+      </div>
+      <p class="section-desc">Fale com nossa equipe. Respondemos em até 24 horas úteis.</p>
+    </div>
+    
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Estamos <em>à disposição</em></h2>
+        <p>Envie sua mensagem e retornaremos em até 24 horas úteis com os próximos passos.</p>
+        <div class="contact-item">
+          <div class="ico">✉</div>
+          <div class="meta">
+            <strong>E-mail</strong>
+            <span><a href="mailto:broerstech@gmail.com">broerstech@gmail.com</a></span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ico">☎</div>
+          <div class="meta">
+            <strong>Telefone</strong>
+            <span><a href="tel:+556196454032">+55 (61) 9645-4032</a></span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ico">⌖</div>
+          <div class="meta">
+            <strong>Localização</strong>
+            <span>Centro-Oeste, Brasil</span>
+          </div>
+        </div>
+      </div>
+      
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" required placeholder="Seu nome completo">
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail corporativo</label>
+            <input type="email" id="email" required placeholder="seu@empresa.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="empresa">Empresa</label>
+            <input type="text" id="empresa" placeholder="Nome da empresa">
+          </div>
+          <div class="form-group">
+            <label for="assunto">Assunto</label>
+            <input type="text" id="assunto" placeholder="Ex: Novo projeto, consultoria...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" required placeholder="Conte-nos sobre o seu projeto ou desafio..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-platinum">Enviar mensagem <span class="arrow">→</span></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="brand-logo">
+          <!-- O SRC ABAIXO CHAMA A SUA IMAGEM -->
+          <img src="logo.png" alt="BroersTech Logo" class="logo-img">
+        </a>
+        <p>Engenharia digital de alto nível. Tecnologia que conecta, soluções que transformam.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#about">Sobre nós</a></li>
+          <li><a href="#founders">Fundadores</a></li>
+          <li><a href="#services">Serviços</a></li>
+          <li><a href="#contact">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#services">Desenvolvimento</a></li>
+          <li><a href="#services">Cloud & DevOps</a></li>
+          <li><a href="#services">Consultoria</a></li>
+          <li><a href="#services">Segurança</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="mailto:broerstech@gmail.com">broerstech@gmail.com</a></li>
+          <li><a href="tel:+556196454032">+55 (61) 9645-4032</a></li>
+          <li>Centro-Oeste · Brasil</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BroersTech — Todos os direitos reservados</span>
+      <span class="made">Feito com precisão <span style="color: var(--neon-blue);">◆</span> Centro-Oeste, Brasil</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  
+  function toggleMenu() {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+  }
+  menuToggle.addEventListener('click', toggleMenu);
+  overlay.addEventListener('click', toggleMenu);
+  
+  document.querySelectorAll('.sidebar-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 900) toggleMenu();
+    });
+  });
+  
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const id = this.getAttribute('href');
+      if (id.length > 1) {
+        const t = document.querySelector(id);
+        if (t) {
+          e.preventDefault();
+          const top = t.getBoundingClientRect().top + window.scrollY - 20;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+  
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const links = document.querySelectorAll('.sidebar-nav a');
+  
+  window.addEventListener('scroll', () => {
+    let current = 'home';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    links.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  });
+  
+  function handleSubmit(e) {
+    e.preventDefault();
+    alert('Obrigado pelo contato! A equipe BroersTech responderá em breve.');
+    e.target.reset();
+  }
+</script>
+
+</body>
+</html>
